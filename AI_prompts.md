@@ -7,17 +7,17 @@ Each problem section follows this format:
 2. At least one prompt typed by the user.
 3. A follow-up prompt (if needed), with one sentence explaining what was lacking after the first prompt.
 
-## Problem 1: [Title]
+## Problem 1: Set up the AI_prompts.md logging structure
 
 ### Prompt 1
 
-[Prompt text]
+For problem 1, please create a file named AI_prompts.md at the root of our project directory. This file will serve as a log where we record the prompts we use for each problem in this assignment as we work through them step-by-step. For now, please initialize the file with a clear title and structure so we can begin logging our prompts for Problem 1 and subsequent problems.
 
 ### Follow-up Prompt (if needed)
 
-[Follow-up prompt text]
+For the following question, please update our AI_prompts.md file to ensure it strictly follows the formatting requirements for all subsequent problems. Each problem's section in the file must include: 1. The problem number and title. 2. At least one prompt I typed. 3. One follow-up prompt if needed, along with one sentence explaining what was lacking after the first prompt.
 
-**Why the follow-up was needed:** [One sentence explaining what was lacking after the first prompt.]
+**Why the follow-up was needed:** The first pass only had a bare title and an empty "Problem 1 / Prompt 1" heading with no defined structure for subsequent problems, so it needed an explicit per-problem template (prompt + optional follow-up + one-sentence rationale) before it could be used consistently going forward.
 
 ## Problem 2: Inspect campus_customs.db and copy to a working database
 
