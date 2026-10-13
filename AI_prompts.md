@@ -192,3 +192,15 @@ Please complete the remaining reflections and analysis on the Reflection tab of 
 N/A
 
 **Why the follow-up was needed:** N/A — the initial prompt was specific enough to complete the task in one pass.
+
+## Problem 11: Prepare the repository for final submission
+
+### Prompt 1
+
+For Problem 11, please prepare our repository for final submission by completing the following: 1. Initialize a git repository (if not already done), ensure our real .env file is excluded via .gitignore (while keeping .env.example), and verify that both database files under data/ (campus_customs.db and campus_customs_new.db) are included. 2. Push our code to a new public GitHub repository. 3. Save the public repository URL into output/github_url.txt so we can easily submit it to Canvas. 4. Double-check that our file structure matches the expected layout, including AI_prompts.md, requirements.txt, .env.example, .gitignore, .mcp.json, README.md, the mcp_server/ directory, frontend/, backend/, and all required output files.
+
+### Follow-up Prompt (if needed)
+
+N/A
+
+**Why the follow-up was needed:** N/A — the initial prompt was specific enough to complete the task in one pass. While assembling the repo I found `mcp_server/requirements.txt` was missing (an earlier turn had apparently written "fastmcp" to the project root instead, due to a cwd mix-up across turns) and recreated it; also added a root-level `requirements.txt`, `.env`/`.env.example`, `.gitignore`, and `README.md`, none of which existed yet.
