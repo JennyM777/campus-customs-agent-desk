@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Campus Customs — Desk Plan</title>
+<style>
+  :root {
+    --bg: #0f1216;
+    --panel: #171b21;
+    --border: #2a2f37;
+    --text: #e6e9ef;
+    --muted: #9aa3b2;
+    --accent: #5b9bf2;
+    --accent-soft: #1d2a3e;
+    --ok: #4fbf7a;
+    --warn: #e0a84f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 32px 24px 64px;
+  }
+  h1 {
+    font-size: 1.4rem;
+    margin: 0 0 4px;
+  }
+  .subtitle {
+    color: var(--muted);
+    margin: 0 0 24px;
+    font-size: 0.95rem;
+  }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-weight: 600;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .panel { display: none; max-width: 860px; }
+  .panel.active { display: block; }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .ticket-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .ticket-meta span strong { color: var(--text); }
+
+  h2 { font-size: 1.1rem; margin: 0 0 10px; }
+  h3 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin: 18px 0 8px;
+  }
+  h3:first-of-type { margin-top: 4px; }
+
+  .step {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .step-num {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step p { margin: 0; line-height: 1.45; font-size: 0.92rem; }
+  .step .label { color: var(--muted); font-size: 0.78rem; display: block; margin-bottom: 2px; }
+
+  .handoff-box {
+    background: var(--accent-soft);
+    border: 1px solid #2d4567;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 10px 0 14px;
+    font-size: 0.9rem;
+  }
+  .handoff-box .from-to {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .tool-list { list-style: none; padding: 0; margin: 0; }
+  .tool-list li {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    background: var(--accent-soft);
+    color: #bcd4f7;
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 6px;
+    margin: 0 6px 6px 0;
+  }
+
+  .not-called {
+    margin-top: 14px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    border-top: 1px dashed var(--border);
+    padding-top: 10px;
+  }
+  .not-called strong { color: var(--warn); }
+
+  .actual-divider {
+    margin: 26px 0 16px;
+    padding-top: 18px;
+    border-top: 2px solid var(--ok);
+  }
+  .actual-divider h2 {
+    color: var(--ok);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+  }
+  .actual-box {
+    background: var(--ok-soft, #11301f);
+    border: 1px solid #1f5c3c;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 10px 0 14px;
+    font-size: 0.9rem;
+  }
+  .actual-box .from-to { font-weight: 700; color: var(--ok); margin-bottom: 4px; }
+  .agent-tools {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+  .agent-tools .agent-name { font-weight: 700; color: var(--ok); font-size: 0.85rem; margin-bottom: 6px; }
+  .divergence-note {
+    background: #3a2a12;
+    border: 1px solid var(--warn);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 0.85rem;
+  }
+  .divergence-note strong { color: var(--warn); }
+  .quote {
+    font-style: italic;
+    color: var(--muted);
+    border-left: 2px solid var(--border);
+    padding-left: 10px;
+    margin: 8px 0;
+    font-size: 0.85rem;
+  }
+
+  .stub {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>Desk Plan — Campus Customs Multi-Agent Team</h1>
+<p class="subtitle">What we expect the Boss agent to do on each open ticket, before we ever run it against a real model.</p>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="t101">Ticket 101</button>
+  <button class="tab-btn" data-tab="t102">Ticket 102</button>
+  <button class="tab-btn" data-tab="t103">Ticket 103</button>
+  <button class="tab-btn" data-tab="cash">Cash</button>
+  <button class="tab-btn" data-tab="reflection">Reflection</button>
+</div>
+
+<!-- Ticket 101 -->
+<section id="t101" class="panel active">
+  <div class="card">
+    <div class="ticket-meta">
+      <span><strong>Type:</strong> customer_order</span>
+      <span><strong>Requester:</strong> Tauhid Zaman</span>
+      <span><strong>Item:</strong> CC-TEE-WHITE, size S, qty 1</span>
+      <span><strong>Linked invoice:</strong> 501</span>
+    </div>
+    <h2>Bulldog tee — size S out of stock, reorder already invoiced</h2>
+
+    <h3>1. Who the Boss calls first, and why</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <p><span class="label">get_ticket_details(101)</span>The Boss's own first move is an MCP tool call, not a delegation. This single call pulls the ticket plus everything already linked to it — the CC-TEE-WHITE inventory breakdown (size S = 0 on hand) and invoice 501 ($840, "Rush reprint CC-TEE-WHITE S," open, owed to Bulldog Print Co). It's called first because it already answers "is there stock" and "is a reorder already underway," so the Boss knows exactly what's still unresolved before deciding who to delegate to.</p>
+    </div>
+
+    <h3>2. All expected agent delegations</h3>
+    <div class="handoff-box">
+      <div class="from-to">Boss → Accounting (the only delegation)</div>
+      "Invoice 501 to Bulldog Print Co is open for $840 — confirm it's genuinely unpaid, check whether it's overdue against desk.date_today, and tell me if the checking balance can cover it if we want to clear it."
+    </div>
+    <p style="font-size:0.9rem;color:var(--muted);margin-top:-6px;">Accounting is the right (and only) specialist here because the open question isn't "is there stock" — <code>get_ticket_details</code> already answered that — it's whether the existing invoice is a blocker and whether paying it down is affordable.</p>
+    <div class="not-called">
+      <strong>Not delegated to:</strong> Inventory (stock data already came bundled with the ticket), Facilities (no lease involved), Customer Service (held until the invoice question is resolved, so the reply isn't a guess).
+    </div>
+
+    <h3>3. MCP tools this run uses</h3>
+    <p style="font-size:0.9rem;color:var(--muted);margin:-4px 0 8px;">Called by the Boss directly:</p>
+    <ul class="tool-list">
+      <li>get_ticket_details</li>
+    </ul>
+    <p style="font-size:0.9rem;color:var(--muted);margin:4px 0 8px;">Called by Accounting during its delegated run:</p>
+    <ul class="tool-list">
+      <li>get_invoice</li>
+      <li>get_desk_today</li>
+      <li>get_cash_account</li>
+    </ul>
+
+    <div class="actual-divider"><h2>✅ Actual — real run against gpt-6-luna, 2026-08-31</h2></div>
+
+    <h3>1. Who the Boss actually called first</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <p><span class="label">get_ticket_details</span>Matched the plan exactly — this was the Boss's first and only direct MCP call before delegating.</p>
+    </div>
+
+    <div class="divergence-note">
+      <strong>Divergence from plan:</strong> the Boss delegated to <strong>three</strong> specialists, not one. The plan expected only Accounting; in the real run, the Boss also pulled in Inventory (to get a vendor name and lead time, not just confirm the stock number already in hand) and Customer Service (to draft a reply), rather than holding the reply back as the plan assumed.
+    </div>
+
+    <h3>2. All actual agent delegations</h3>
+    <div class="actual-box">
+      <div class="from-to">Boss → Accounting</div>
+      Checked invoice 501's status, overdue-ness, and cash affordability.
+    </div>
+    <div class="actual-box">
+      <div class="from-to">Boss → Inventory</div>
+      Confirmed size S stock is 0 (full breakdown: S 0, M 5, L 3, XL 2) and named Bulldog Print Co (5-day lead time) as the restock vendor — but flagged that a new order is blocked by the same open invoice.
+    </div>
+    <div class="actual-box">
+      <div class="from-to">Boss → Customer Service</div>
+      Drafted a reply to Tauhid Zaman explaining the stockout and that a restock date can't be confirmed yet.
+    </div>
+
+    <div class="agent-tools">
+      <div class="agent-name">Accounting's tool calls</div>
+      <ul class="tool-list">
+        <li>get_desk_today</li>
+        <li>get_invoice</li>
+        <li>get_cash_account</li>
+        <li>get_unpaid_invoices_for_vendor</li>
+      </ul>
+      <p class="quote">"Invoice 501 for Bulldog Print Co remains open and is overdue (due 2026-08-28)... Checking balance is $3,400. Propose the $840 invoice payment for human approval only; no payment has been executed."</p>
+    </div>
+    <div class="agent-tools">
+      <div class="agent-name">Inventory's tool calls</div>
+      <ul class="tool-list">
+        <li>check_inventory</li>
+        <li>list_vendors</li>
+        <li>get_unpaid_invoices_for_vendor</li>
+      </ul>
+      <p class="quote">"There are 0 size S on hand... Bulldog Print Co is the matching apparel restock vendor (5 lead days), but invoice 501 is open/unpaid and new shipments are blocked until the invoice is resolved."</p>
+    </div>
+    <div class="agent-tools">
+      <div class="agent-name">Customer Service's tool calls</div>
+      <ul class="tool-list">
+        <li>get_ticket_details</li>
+      </ul>
+      <p class="quote">"We're unable to fulfill your Bulldog tee order in size S right now because it's out of stock... We'll update you once the hold is resolved."</p>
+    </div>
+
+    <h3>3. Outcome</h3>
+    <p style="font-size:0.9rem;">Ticket marked <strong style="color:var(--ok);">resolved</strong>. One payment is pending human approval: <strong>$840 to Bulldog Print Co (invoice 501)</strong>, checking balance unaffected ($3,400) until that approval happens.</p>
+  </div>
+</section>
+
+<!-- Ticket 102 -->
+<section id="t102" class="panel">
+  <div class="card">
+    <div class="ticket-meta">
+      <span><strong>Type:</strong> rent_notice</span>
+      <span><strong>Requester:</strong> Elm City Properties</span>
+      <span><strong>Linked lease:</strong> 1 (Chapel Street shop)</span>
+    </div>
+    <h2>Rent due notice — "due in 2 days"</h2>
+
+    <h3>1. Who the Boss calls first, and why</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <p><span class="label">get_ticket_details(102)</span>The Boss's own first move is an MCP tool call, not a delegation. It pulls the ticket plus its linked lease row (Chapel Street shop, Elm City Properties, $2,400/month, next_due 2026-09-02). It's called first because it confirms a lease is involved and roughly what's at stake — but it stops short of saying whether rent is actually overdue or affordable, which is why the Boss still needs a specialist next.</p>
+    </div>
+
+    <h3>2. All expected agent delegations</h3>
+    <div class="handoff-box">
+      <div class="from-to">Boss → Facilities (the only delegation)</div>
+      "Lease 1's rent is $2,400, next due 2026-09-02. Compare that to desk.date_today, tell me exactly how many days out it is, and if payment is warranted, draft a PaymentRequest — but only after confirming the checking balance can cover it."
+    </div>
+    <p style="font-size:0.9rem;color:var(--muted);margin-top:-6px;">Facilities owns lease interpretation and is the one agent instructed to check affordability before drafting a rent payment request — Accounting isn't needed directly since Facilities' own tools already include get_cash_account for this exact check.</p>
+    <div class="not-called">
+      <strong>Not delegated to:</strong> Inventory (no sku on this ticket), Accounting (Facilities checks affordability itself), Customer Service (this is an internal payment decision, not a reply someone is waiting on).
+    </div>
+
+    <h3>3. MCP tools this run uses</h3>
+    <p style="font-size:0.9rem;color:var(--muted);margin:-4px 0 8px;">Called by the Boss directly:</p>
+    <ul class="tool-list">
+      <li>get_ticket_details</li>
+    </ul>
+    <p style="font-size:0.9rem;color:var(--muted);margin:4px 0 8px;">Called by Facilities during its delegated run:</p>
+    <ul class="tool-list">
+      <li>get_desk_today</li>
+      <li>get_lease</li>
+      <li>get_cash_account</li>
+    </ul>
+
+    <div class="actual-divider"><h2>✅ Actual — real run against gpt-6-luna, 2026-08-31</h2></div>
+
+    <h3>1. Who the Boss actually called first</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <p><span class="label">get_ticket_details</span>Matched the plan — the Boss's first move, before any delegation.</p>
+    </div>
+
+    <div class="divergence-note">
+      <strong>Divergence from plan:</strong> two things, corrected on review. First, the Boss delegated to <strong>two</strong> specialists, not one — the plan's "Not delegated to" list explicitly predicted no Customer Service call for this ticket, but the real run delegated to Customer Service anyway to draft the landlord reply, same as it did on 101 and 103. Second, the Boss itself also called <code>get_desk_today</code> directly (in between the two delegations), in addition to Facilities calling it independently inside its own run — the plan only expected the Boss to call <code>get_ticket_details</code> directly. The one part of the plan that did hold: Facilities was still the right (and only) specialist needed to assess the payment itself.
+    </div>
+
+    <h3>2. All actual agent delegations</h3>
+    <div class="actual-box">
+      <div class="from-to">Boss → Facilities</div>
+      Confirmed rent is $2,400/month, next due 2026-09-02, not yet overdue (2 days out from desk date 2026-08-31), and that the checking balance ($3,400) can cover it. Drafted a rent PaymentRequest for human approval.
+    </div>
+    <div class="actual-box">
+      <div class="from-to">Boss → Customer Service</div>
+      Drafted a professional reply to Elm City Properties confirming the amount/due date and that payment is pending internal approval.
+    </div>
+
+    <div class="agent-tools">
+      <div class="agent-name">Facilities' tool calls</div>
+      <ul class="tool-list">
+        <li>get_lease</li>
+        <li>get_desk_today</li>
+        <li>get_cash_account</li>
+      </ul>
+      <p class="quote">"Lease 1 is for the Chapel Street shop... rent of $2,400. The next due date is 2026-09-02, which is 2 days after desk.date_today... rent is not overdue and is due soon... PaymentRequest is drafted for human approval only; no payment was executed."</p>
+    </div>
+    <div class="agent-tools">
+      <div class="agent-name">Customer Service's tool calls</div>
+      <ul class="tool-list">
+        <li>get_ticket_details</li>
+      </ul>
+      <p class="quote">"The monthly rent of $2,400 for the Chapel Street shop is due September 2, 2026... it has not been paid."</p>
+    </div>
+
+    <h3>3. Outcome</h3>
+    <p style="font-size:0.9rem;">Ticket marked <strong style="color:var(--ok);">resolved</strong>. One payment is pending human approval: <strong>$2,400 rent on lease 1</strong>, checking balance unaffected ($3,400) until approved.</p>
+  </div>
+</section>
+
+<!-- Ticket 103 -->
+<section id="t103" class="panel">
+  <div class="card">
+    <div class="ticket-meta">
+      <span><strong>Type:</strong> price_override</span>
+      <span><strong>Requester:</strong> Yale AI Club</span>
+      <span><strong>Item:</strong> CC-HOOD-NAVY, size M, qty 20</span>
+    </div>
+    <h2>Bulk hoodie discount — 20 units, size M</h2>
+
+    <h3>1. Who the Boss calls first, and why</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <p><span class="label">get_ticket_details(103)</span>The Boss's own first move is an MCP tool call, not a delegation. It pulls the ticket plus the full CC-HOOD-NAVY inventory breakdown across all sizes and its pricing (unit_cost $22 / list_price $58). It's called first because it already tells the Boss that size M only has 8 units on hand against a request for 20 — a 12-unit shortfall — so the open question isn't "what's in stock," it's "what do we do about the shortfall."</p>
+    </div>
+
+    <h3>2. All expected agent delegations</h3>
+    <div class="handoff-box">
+      <div class="from-to">Boss → Inventory (the only delegation)</div>
+      "Size M of CC-HOOD-NAVY is short by 12 units against this request. Recommend a vendor who can reprint/restock it, give me their lead_days, and confirm they don't have an open unpaid invoice that would block a new order."
+    </div>
+    <p style="font-size:0.9rem;color:var(--muted);margin-top:-6px;">Inventory is the only specialist that can name a vendor and lead time — that information isn't in <code>get_ticket_details</code>'s output, and checking the vendor's unpaid invoices before recommending a reorder is a rule only the Inventory agent's prompt enforces.</p>
+    <div class="not-called">
+      <strong>Not delegated to:</strong> Accounting (the discount itself is a margin/pricing call, not a cash movement — the $36/unit margin is already visible from get_ticket_details), Facilities (no lease involved), Customer Service (held until the restock question is answered).
+    </div>
+
+    <h3>3. MCP tools this run uses</h3>
+    <p style="font-size:0.9rem;color:var(--muted);margin:-4px 0 8px;">Called by the Boss directly:</p>
+    <ul class="tool-list">
+      <li>get_ticket_details</li>
+    </ul>
+    <p style="font-size:0.9rem;color:var(--muted);margin:4px 0 8px;">Called by Inventory during its delegated run:</p>
+    <ul class="tool-list">
+      <li>check_inventory</li>
+      <li>list_vendors</li>
+      <li>get_unpaid_invoices_for_vendor</li>
+    </ul>
+
+    <div class="actual-divider"><h2>✅ Actual — real run against gpt-6-luna, 2026-08-31</h2></div>
+
+    <h3>1. Who the Boss actually called first</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <p><span class="label">get_ticket_details</span>Matched the plan — the Boss's first move, before any delegation.</p>
+    </div>
+
+    <div class="divergence-note">
+      <strong>Divergence from plan:</strong> the Boss delegated to <strong>three</strong> specialists, not one. The plan expected only Inventory; the real run also brought in Accounting (to check invoice 501 — the same invoice blocking ticket 101's restock — and confirm checking can't yet cover a discount decision without a quoted price) and Customer Service (to draft a reply), rather than stopping at a single vendor/lead-time recommendation.
+    </div>
+
+    <h3>2. All actual agent delegations</h3>
+    <div class="actual-box">
+      <div class="from-to">Boss → Inventory</div>
+      Found only 8 of the requested 20 size-M hoodies on hand (12 short), named Bulldog Print Co as the restock vendor (5-day lead time), and flagged that vendor's open invoice as a blocker to a new shipment.
+    </div>
+    <div class="actual-box">
+      <div class="from-to">Boss → Accounting</div>
+      Confirmed invoice 501 ($840, Bulldog Print Co) is open and overdue, and that checking ($3,400) could cover it — but noted the bulk discount itself can't be evaluated without a quoted price.
+    </div>
+    <div class="actual-box">
+      <div class="from-to">Boss → Customer Service</div>
+      Drafted a reply to Yale AI Club explaining the stock shortfall, the restock blocker, and that no discount is confirmed yet.
+    </div>
+
+    <div class="agent-tools">
+      <div class="agent-name">Inventory's tool calls</div>
+      <ul class="tool-list">
+        <li>check_inventory</li>
+        <li>list_vendors</li>
+        <li>get_unpaid_invoices_for_vendor</li>
+      </ul>
+      <p class="quote">"Only 8 M are on hand... 8 can be supplied now and 12 are short... An open unpaid invoice with Bulldog Print Co blocks recommending a new shipment until Accounting addresses it."</p>
+    </div>
+    <div class="agent-tools">
+      <div class="agent-name">Accounting's tool calls</div>
+      <ul class="tool-list">
+        <li>get_desk_today</li>
+        <li>get_invoice</li>
+        <li>get_cash_account</li>
+        <li>get_unpaid_invoices_for_vendor</li>
+      </ul>
+      <p class="quote">"The hoodie bulk discount cannot be financially approved from this information: the ticket provides no quoted discount amount or resulting order price... the vendor's open invoice currently blocks a new shipment/order."</p>
+    </div>
+    <div class="agent-tools">
+      <div class="agent-name">Customer Service's tool calls</div>
+      <ul class="tool-list">
+        <li>get_ticket_details</li>
+      </ul>
+      <p class="quote">"We currently have 8 size M... in stock, so we can't fulfill all 20 right now... No bulk discount has been approved, and any discount request remains pending internal approval."</p>
+    </div>
+
+    <h3>3. Outcome</h3>
+    <p style="font-size:0.9rem;">Ticket marked <strong style="color:var(--ok);">resolved</strong>. The same pending invoice payment surfaced again: <strong>$840 to Bulldog Print Co (invoice 501)</strong> — approving it is a prerequisite to restocking the shortfall for this ticket too.</p>
+  </div>
+</section>
+
+<!-- Cash (stub) -->
+<section id="cash" class="panel">
+  <div class="card">
+    <h2>Cash — itemized flow for this run</h2>
+
+    <div class="actual-box">
+      <div class="from-to">Starting balance</div>
+      <strong>$3,400.00</strong> as of 2026-08-31 — read immediately after resetting <code>data/campus_customs_new.db</code> from <code>data/campus_customs.db</code>, before any ticket ran.
+    </div>
+
+    <h3>Ticket 101 — Bulldog tee (Tauhid Zaman)</h3>
+    <p style="font-size:0.9rem;">The team's run itself moved no cash — Accounting only drafted a <code>PaymentRequest</code> for invoice 501. A human (Jenny Meng) then approved it via <code>POST /api/payments/approve</code>:</p>
+    <div class="agent-tools">
+      <div class="agent-name">Pay action</div>
+      Invoice payment · <strong>$840.00</strong> · to Bulldog Print Co (vendor 1) · invoice 501 marked <code>paid</code> · approved by Jenny Meng
+      <p class="quote">Balance: $3,400.00 → $2,560.00</p>
+    </div>
+
+    <h3>Ticket 102 — Rent due (Elm City Properties)</h3>
+    <p style="font-size:0.9rem;">Facilities drafted a rent <code>PaymentRequest</code> for lease 1; no cash moved during the run itself. Jenny Meng then approved it:</p>
+    <div class="agent-tools">
+      <div class="agent-name">Pay action</div>
+      Rent payment · <strong>$2,400.00</strong> · Chapel Street shop lease (lease 1) · approved by Jenny Meng
+      <p class="quote">Balance: $2,560.00 → $160.00</p>
+    </div>
+
+    <h3>Ticket 103 — Bulk hoodie discount (Yale AI Club)</h3>
+    <p style="font-size:0.9rem;"><strong>No separate cash movement.</strong> Accounting re-surfaced the same open invoice 501 (the Bulldog Print Co invoice already paid under ticket 101) as the blocker standing between the shop and a restock large enough to cover the 12-unit shortfall. No discount was quoted or approved, so there was nothing distinct to pay for this ticket — paying invoice 501 under ticket 101 is also what clears the vendor relationship needed before a 103 restock could proceed.</p>
+
+    <div class="actual-divider"><h2>💵 Ending balance</h2></div>
+    <div class="actual-box">
+      <div class="from-to">Final checking balance</div>
+      <strong>$160.00</strong> as of 2026-08-31 — confirmed directly against <code>cash_accounts</code> in <code>data/campus_customs_new.db</code> via <code>GET /api/cash/balance</code>.
+      <p class="quote">$3,400.00 − $840.00 (invoice 501) − $2,400.00 (rent) = $160.00 ✓</p>
+    </div>
+  </div>
+</section>
+
+<!-- Reflection (stub) -->
+<section id="reflection" class="panel">
+  <div class="card">
+    <h2>Reflection</h2>
+    <p style="font-size:0.9rem;color:var(--muted);">Written after running all three tickets through the real team against <code>gpt-6-luna</code> and approving both resulting payments (see the Cash tab and <code>output/resolved_tickets.json</code>).</p>
+
+    <h3>1. How we evaluate agent performance, per ticket</h3>
+    <p style="font-size:0.9rem;">We judge each agent run on four things: (a) <strong>factual correctness</strong> — did every number/date/status it reported trace back to a real MCP tool call, with nothing invented; (b) <strong>decision quality</strong> — did it correctly identify blockers (stockouts, unpaid invoices, affordability) rather than papering over them; (c) <strong>guardrail adherence</strong> — did it stop short of executing a payment, going negative on cash, or confirming something uncertain to a customer; and (d) <strong>delegation discipline</strong> — did the Boss call only the specialists actually needed, or fan out needlessly.</p>
+
+    <div class="agent-tools">
+      <div class="agent-name">Ticket 101 — Bulldog tee</div>
+      Passes on all four counts. Inventory correctly reported size S at exactly 0 (matching <code>inventory</code>), Accounting correctly flagged invoice 501 as overdue against <code>desk.date_today</code> (2026-08-31 vs. due 2026-08-28) rather than assuming the real-world date, and it proposed — but did not execute — an $840 payment. Customer Service's reply to Tauhid Zaman didn't promise a restock date it didn't have, which is exactly the "don't invent facts" rule in its prompt working as intended.
+    </div>
+    <div class="agent-tools">
+      <div class="agent-name">Ticket 102 — Rent due</div>
+      Passes. Facilities correctly computed "2 days out, not overdue" (next_due 2026-09-02 minus desk date 2026-08-31) instead of treating the email's own claim ("due in 2 days") as ground truth — it re-derived the number itself, which is exactly why <code>desk.date_today</code> is the enforced anchor rather than trusting ticket text. It also checked the $2,400 rent against the $3,400 balance before drafting the PaymentRequest, correctly finding no shortfall.
+    </div>
+    <div class="agent-tools">
+      <div class="agent-name">Ticket 103 — Bulk hoodie discount</div>
+      Passes, and is the most interesting case: Inventory correctly computed the exact shortfall (20 requested − 8 on hand = 12 short) instead of just saying "not enough," and Accounting explicitly <em>refused</em> to evaluate the discount ("the ticket provides no quoted discount amount... affordability cannot be checked") rather than guessing a number. That refusal is good behavior, not a failure — it's the "no agent invents data" rule holding under a genuinely ambiguous request.
+    </div>
+
+    <h3>2. Actual vs. Expected, ticket by ticket</h3>
+    <p style="font-size:0.9rem;">The single biggest pattern across all three tickets: the Boss delegated to <strong>more</strong> specialists than planned, every time — and the specific extra specialist was always Customer Service.</p>
+    <div class="actual-box">
+      <div class="from-to">Ticket 101</div>
+      Planned: 1 delegation (Accounting only). Actual: 3 (Accounting, Inventory, Customer Service). The plan assumed <code>get_ticket_details</code>'s bundled inventory data meant Inventory didn't need to be consulted separately — the real Boss consulted it anyway, for a vendor recommendation the bundled data doesn't include. Human approval: the $840 invoice-501 payment was drafted during the run and approved afterward by Jenny Meng, bringing checking from $3,400 to $2,560.
+    </div>
+    <div class="actual-box">
+      <div class="from-to">Ticket 102</div>
+      Planned: 1 delegation (Facilities only). Actual: 2 (Facilities, Customer Service) — the plan's own "Not delegated to" list had explicitly predicted no Customer Service call here, which turned out wrong. Human approval: the $2,400 rent payment was drafted, then approved afterward, bringing checking from $2,560 to $160.
+    </div>
+    <div class="actual-box">
+      <div class="from-to">Ticket 103</div>
+      Planned: 1 delegation (Inventory only). Actual: 3 (Inventory, Accounting, Customer Service) — same pattern as 101. Human approval: no new payment was drafted for this ticket specifically; it re-surfaced the already-pending invoice 501, which was approved once under ticket 101 and counted there.
+    </div>
+    <p style="font-size:0.9rem;">In every case the plan correctly identified <em>which</em> specialist mattered most for the core decision — it just under-predicted that the Boss would also loop in Customer Service as a matter of course, rather than holding the reply back. That's a reasonable, low-risk divergence: it makes the team more consistently customer-facing than planned, not less safe.</p>
+
+    <h3>3. What would have been simpler as a single agent with tools</h3>
+    <p style="font-size:0.9rem;">Honestly, a good deal of this would have been simpler as one agent holding all 9 MCP tools. All three tickets ended up calling 3–4 specialists' worth of tools anyway (just split across agent boundaries), so a single agent would have made the same tool calls with less overhead: no `delegate_to_*` round-trips, no re-serializing a sub-agent's Pydantic output back into a string for the Boss to re-read, and one combined `final_summary` instead of stitching together four separate structured outputs. For a shop this small — three tickets, one vendor relationship, one lease — the "who do I even ask" problem that justifies a Boss/specialist split barely exists yet.</p>
+    <p style="font-size:0.9rem;">Where the multi-agent structure earns its keep is exactly what it's <em>for</em>: enforcing different rules per domain without one giant prompt trying to hold all of them at once. A single agent's system prompt would need to simultaneously remember "never execute a payment," "check unpaid invoices before recommending a vendor," "never let cash go negative," and "don't invent a customer-facing promise" — all at once, for every ticket, regardless of relevance. Splitting them lets each prompt stay short and let the tool allowlist (enforced in code via `.filtered()`, not just instruction) do some of the enforcement mechanically. That's a real advantage once the shop (or the rule set) grows past what one prompt can hold reliably — just not yet decisively proven at this scale.</p>
+
+    <h3>4. Three new problems this team could solve with our existing toolset</h3>
+
+    <div class="agent-tools">
+      <div class="agent-name">A. A second vendor's invoice comes due the same week as rent — and this time the math doesn't work</div>
+      <p style="font-size:0.9rem;">Suppose a new ticket arrives: Elm City Gifts (vendor 2 in our <code>vendors</code> table) sends an invoice for, say, $1,200 for a mug restock, due the same week lease 1's rent ($2,400) is due — but this time it lands <em>after</em> we've already paid out invoice 501 and rent, so checking sits at our actual post-Problem-9 balance of $160.00. Walking through it with our real tools: the Boss calls <code>get_ticket_details</code>, sees an <code>invoice_id</code> pointing at a new row in <code>invoices</code> with <code>vendor_id=2</code>, and delegates to Accounting. Accounting calls <code>get_invoice</code> (amount, due_date, vendor_name), <code>get_desk_today</code> (still 2026-08-31), and <code>get_cash_account</code> — and finds $1,200 against a $160.00 balance. This is exactly the "never let cash go negative" guardrail from <code>backend/prompts/accounting.md</code> firing for real: Accounting reports the shortfall as a blocker and refuses to draft a payable <code>PaymentRequest</code>, rather than proposing one it can't afford. No new tool is needed — this is precisely why <code>get_cash_account</code> exists, and our real run already proved the checking balance tracks correctly across sequential approvals.</p>
+    </div>
+
+    <div class="agent-tools">
+      <div class="agent-name">B. A customer asks for a size we're out of, but a close substitute exists</div>
+      <p style="font-size:0.9rem;">This is a direct extension of ticket 101, which our real run already half-answered: CC-TEE-WHITE size S is 0 on hand, but the same <code>check_inventory</code> call that told us that also returned M=5, L=3, XL=2 in one response — it's not a single-size lookup, it returns the whole sku's breakdown by design. A new ticket like "do you have the Bulldog tee in a size S <em>or close to it</em>?" needs no new MCP tool: Inventory already has the full stock-by-size list in hand from a single <code>check_inventory("CC-TEE-WHITE")</code> call, and its prompt already instructs it to report every size, not just the one requested. The only change needed is a Boss/Customer-Service prompt tweak to actively suggest the nearest in-stock size (M, in this case) instead of just reporting the shortfall — a prompt change, not a new capability.</p>
+    </div>
+
+    <div class="agent-tools">
+      <div class="agent-name">C. "Before we approve anything else this week, can we afford invoice 501 <em>and</em> rent together?"</div>
+      <p style="font-size:0.9rem;">This is literally the question a human should have asked before Problem 9's two separate approvals — and it's answerable today only because we happened to approve sequentially and check the balance in between ($3,400 → $2,560 → $160.00). If both had been proposed in the same ticket batch, Accounting and Facilities would each independently confirm their <em>own</em> $840 and $2,400 payments fit under $3,400 — both true in isolation — without either one knowing the combined total is $3,240, just $160 under the actual starting balance. No new tool is needed (both agents already call <code>get_cash_account</code>), but the Boss's prompt (<code>backend/prompts/boss.md</code>) would need an explicit instruction to sum every specialist's proposed <code>PaymentRequest.amount</code> against one shared balance snapshot before presenting them together, rather than trusting two independently-affordable answers to also be jointly affordable.</p>
+    </div>
+
+    <h3>5. Three new problems this team could not solve with our current tools</h3>
+
+    <div class="agent-tools">
+      <div class="agent-name">A. "We keep running out of CC-HOOD-NAVY size M — should we raise the standing reorder quantity?"</div>
+      <p style="font-size:0.9rem;">Ticket 103 showed us the symptom (8 on hand against a 20-unit request) but our schema has no memory of <em>why</em> — there's no sales or order-history table, only a frozen snapshot of current <code>inventory.qty</code>. We can't tell if size M always runs low or if this was a one-off spike. <strong>New table:</strong> <code>sales(id, sku, size, qty, sold_at)</code>. <strong>New MCP tool:</strong> <code>get_sales_history(sku, size=None)</code> added to <code>mcp_server/server.py</code>, returning rows from that table the same way <code>check_inventory</code> reads <code>inventory</code>. <strong>No new agent needed</strong> — this extends Inventory's existing remit; its prompt would just gain a line about checking sell-through rate before recommending a reorder quantity, not just a lead time.</p>
+    </div>
+
+    <div class="agent-tools">
+      <div class="agent-name">B. "Tauhid wants to return last month's hoodie for a refund, not reorder a tee"</div>
+      <p style="font-size:0.9rem;">Our entire financial model (<code>payments</code>, <code>/api/payments/approve</code>, every <code>PaymentRequest</code> in <code>backend/models.py</code>) is one-directional: money only ever leaves <code>checking</code> toward a vendor or landlord. A refund is money leaving checking toward a <em>customer</em> — a case our <code>kind: Literal["invoice", "rent"]</code> payment type doesn't even have a slot for, and ticket <code>type</code> has no "return" category either. <strong>New table:</strong> <code>returns(id, original_sku, size, qty, refund_amount, reason, status)</code>. <strong>New MCP tool:</strong> <code>get_return_eligibility(sku)</code> or similar, plus extending <code>payments.kind</code> to accept <code>"refund"</code>. <strong>New agent role:</strong> a Returns agent (or Customer Service's remit expanded with care, since over-trusting a customer's return claim is a real risk) that drafts a <code>RefundRequest</code> — still human-approved, same pattern as today's <code>PaymentRequest</code>, but flowing money the opposite direction.</p>
+    </div>
+
+    <div class="agent-tools">
+      <div class="agent-name">C. "Ask Bulldog Print Co for a rush 2-day turnaround on the next CC-TEE-WHITE reprint, even if it costs more"</div>
+      <p style="font-size:0.9rem;">Every ticket we ran treated Bulldog Print Co's 5-day <code>lead_days</code> in <code>vendors</code> as a fixed fact to report, never something to negotiate. There's no outbound channel to a vendor at all in this system — no email/API integration, and no agent is authorized to make or imply a commitment on the shop's behalf. <strong>New tool:</strong> an outbound <code>draft_vendor_request(vendor_id, request_text)</code> MCP tool that writes a proposal for human review (mirroring how <code>PaymentRequest</code> is drafted, not sent, until approved) rather than actually emailing the vendor. <strong>New agent role:</strong> a Vendor Relations agent, separate from Inventory — negotiating terms and prices is a materially different (and riskier) skill than checking stock counts and reading a static <code>lead_days</code> column, and conflating the two would make Inventory's prompt harder to keep narrow and auditable.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

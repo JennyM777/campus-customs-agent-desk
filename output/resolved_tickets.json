@@ -1,0 +1,126 @@
+{
+  "run_date": "2026-08-31",
+  "starting_checking_balance": 3400.0,
+  "ending_checking_balance": 160.0,
+  "tickets": [
+    {
+      "ticket_id": 101,
+      "type": "customer_order",
+      "requester": "Tauhid Zaman",
+      "subject": "Bulldog tee",
+      "final_status": "resolved",
+      "short_outcome": "CC-TEE-WHITE size S is out of stock (0 on hand); a restock from Bulldog Print Co (5-day lead time) is blocked by their open invoice 501. That invoice was approved and paid during this run, clearing the way for a future restock, but no new order has been placed yet.",
+      "agent_contributions": [
+        {
+          "agent": "boss_agent",
+          "contribution": "Called get_ticket_details(101) directly, then delegated to Accounting, Inventory, and Customer Service.",
+          "mcp_tools_used": ["get_ticket_details"]
+        },
+        {
+          "agent": "accounting_agent",
+          "contribution": "Confirmed invoice 501 ($840, Bulldog Print Co) was open and overdue as of desk date 2026-08-31, confirmed checking ($3,400) could cover it without going negative, and drafted a PaymentRequest.",
+          "mcp_tools_used": ["get_desk_today", "get_invoice", "get_cash_account", "get_unpaid_invoices_for_vendor"]
+        },
+        {
+          "agent": "inventory_agent",
+          "contribution": "Confirmed CC-TEE-WHITE size S stock is 0 (full breakdown: S 0, M 5, L 3, XL 2), identified Bulldog Print Co as the matching restock vendor (5-day lead time), and flagged the open invoice as a blocker to a new order.",
+          "mcp_tools_used": ["check_inventory", "list_vendors", "get_unpaid_invoices_for_vendor"]
+        },
+        {
+          "agent": "customer_service_agent",
+          "contribution": "Drafted a reply to Tauhid Zaman explaining the stockout and that a restock date can't be confirmed yet.",
+          "mcp_tools_used": ["get_ticket_details"]
+        }
+      ],
+      "human_approvals": [
+        {
+          "kind": "invoice",
+          "ref_id": 501,
+          "amount": 840.0,
+          "account": "checking",
+          "approved_by": "Jenny Meng",
+          "paid_at": "2026-08-31",
+          "resulting_balance": 2560.0
+        }
+      ]
+    },
+    {
+      "ticket_id": 102,
+      "type": "rent_notice",
+      "requester": "Elm City Properties",
+      "subject": "Rent due",
+      "final_status": "resolved",
+      "short_outcome": "Rent of $2,400 on the Chapel Street shop lease was confirmed not yet overdue (due 2026-09-02, 2 days out from desk date 2026-08-31) and affordable against the checking balance. The rent payment was approved and paid during this run.",
+      "agent_contributions": [
+        {
+          "agent": "boss_agent",
+          "contribution": "Called get_ticket_details(102) and get_desk_today directly, then delegated to Facilities and Customer Service.",
+          "mcp_tools_used": ["get_ticket_details", "get_desk_today"]
+        },
+        {
+          "agent": "facilities_agent",
+          "contribution": "Confirmed lease 1 terms (Chapel Street shop, Elm City Properties, $2,400/month, next_due 2026-09-02), determined rent is due in 2 days (not overdue), confirmed checking ($3,400) could cover it, and drafted a PaymentRequest.",
+          "mcp_tools_used": ["get_lease", "get_desk_today", "get_cash_account"]
+        },
+        {
+          "agent": "customer_service_agent",
+          "contribution": "Drafted a professional reply to Elm City Properties confirming the amount/due date and that payment was pending internal approval.",
+          "mcp_tools_used": ["get_ticket_details"]
+        }
+      ],
+      "human_approvals": [
+        {
+          "kind": "rent",
+          "ref_id": 1,
+          "amount": 2400.0,
+          "account": "checking",
+          "approved_by": "Jenny Meng",
+          "paid_at": "2026-08-31",
+          "resulting_balance": 160.0
+        }
+      ]
+    },
+    {
+      "ticket_id": 103,
+      "type": "price_override",
+      "requester": "Yale AI Club",
+      "subject": "Bulk hoodie discount",
+      "final_status": "resolved",
+      "short_outcome": "Only 8 of the requested 20 size-M CC-HOOD-NAVY hoodies are in stock (12 short). A restock from Bulldog Print Co is blocked by the same invoice 501 already resolved under ticket 101. No discount was quoted or evaluated, since the ticket provided no proposed price.",
+      "agent_contributions": [
+        {
+          "agent": "boss_agent",
+          "contribution": "Called get_ticket_details(103) directly, then delegated to Inventory, Accounting, and Customer Service.",
+          "mcp_tools_used": ["get_ticket_details"]
+        },
+        {
+          "agent": "inventory_agent",
+          "contribution": "Found only 8 of 20 requested size-M hoodies on hand (other sizes: L 14, S 4, XL 6), named Bulldog Print Co as the restock vendor (5-day lead time), and flagged the vendor's open invoice as a blocker to a new shipment.",
+          "mcp_tools_used": ["check_inventory", "list_vendors", "get_unpaid_invoices_for_vendor"]
+        },
+        {
+          "agent": "accounting_agent",
+          "contribution": "Confirmed invoice 501 was open/overdue and checking could cover it, but noted the bulk discount itself could not be financially evaluated without a quoted price.",
+          "mcp_tools_used": ["get_desk_today", "get_invoice", "get_cash_account", "get_unpaid_invoices_for_vendor"]
+        },
+        {
+          "agent": "customer_service_agent",
+          "contribution": "Drafted a reply to Yale AI Club explaining the stock shortfall, the restock blocker, and that no discount is confirmed yet.",
+          "mcp_tools_used": ["get_ticket_details"]
+        }
+      ],
+      "human_approvals": [
+        {
+          "kind": "invoice",
+          "ref_id": 501,
+          "amount": 840.0,
+          "account": "checking",
+          "approved_by": "Jenny Meng",
+          "paid_at": "2026-08-31",
+          "resulting_balance": 2560.0,
+          "note": "Same invoice-501 approval recorded under ticket 101 — shared across both tickets since it's the one payments row in the database, not a separate transaction for ticket 103."
+        }
+      ]
+    }
+  ]
+}

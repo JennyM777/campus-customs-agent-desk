@@ -1,0 +1,6 @@
+# Top-level Python dependencies for the whole project.
+# (mcp_server/ and backend/ also have their own scoped requirements.txt files.)
+fastmcp
+pydantic-ai
+fastapi
+uvicorn

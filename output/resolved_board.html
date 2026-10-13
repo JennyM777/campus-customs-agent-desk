@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Campus Customs — Resolved Board</title>
+<style>
+  :root {
+    --bg: #0c0f13;
+    --panel: #151a21;
+    --border: #272e38;
+    --text: #e8ebf1;
+    --muted: #8d97a7;
+    --accent: #5b9bf2;
+    --ok: #45c48a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: radial-gradient(circle at 20% -10%, #15202b 0%, #0c0f13 55%);
+    color: var(--text);
+    padding: 32px 28px 60px;
+  }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .subtitle { color: var(--muted); margin: 0 0 28px; font-size: 0.95rem; }
+  .ticket-section {
+    margin-bottom: 36px;
+  }
+  .ticket-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .ticket-header h2 { font-size: 1.05rem; margin: 0; }
+  .status-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: #113224;
+    color: var(--ok);
+  }
+  .ticket-caption { color: var(--muted); font-size: 0.85rem; margin: 0 0 14px; }
+  .screenshot-frame {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--panel);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
+  .screenshot-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>
+</head>
+<body>
+
+<h1>Resolved Board — Campus Customs Agent Desk</h1>
+<p class="subtitle">Screenshots of the live React dashboard (<code>frontend/</code>) after running all three tickets through the real multi-agent team against gpt-6-luna, and after both drafted payments were approved.</p>
+
+<div class="ticket-section">
+  <div class="ticket-header">
+    <h2>Ticket #101 — Bulldog tee</h2>
+    <span class="status-pill">Resolved</span>
+  </div>
+  <p class="ticket-caption">Accounting, Inventory, and Customer Service delegations; invoice 501 pending-approval card still shown (approved separately via the API, so the UI hasn't yet re-synced that specific card).</p>
+  <div class="screenshot-frame">
+    <img src="screenshots/ticket_101.png" alt="Dashboard showing ticket 101 resolved, with live agent feed and final decision">
+  </div>
+</div>
+
+<div class="ticket-section">
+  <div class="ticket-header">
+    <h2>Ticket #102 — Rent due</h2>
+    <span class="status-pill">Resolved</span>
+  </div>
+  <p class="ticket-caption">Facilities and Customer Service delegations; rent PaymentRequest for lease 1.</p>
+  <div class="screenshot-frame">
+    <img src="screenshots/ticket_102.png" alt="Dashboard showing ticket 102 resolved, with live agent feed and final decision">
+  </div>
+</div>
+
+<div class="ticket-section">
+  <div class="ticket-header">
+    <h2>Ticket #103 — Bulk hoodie discount</h2>
+    <span class="status-pill">Resolved</span>
+  </div>
+  <p class="ticket-caption">Inventory, Accounting, and Customer Service delegations; same invoice-501 blocker surfaced again.</p>
+  <div class="screenshot-frame">
+    <img src="screenshots/ticket_103.png" alt="Dashboard showing ticket 103 resolved, with live agent feed and final decision">
+  </div>
+</div>
+
+</body>
+</html>
